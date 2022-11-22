@@ -1,6 +1,5 @@
 import { FC, Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
 import Logo from "./logo.png";
 const Thankyou: FC = () => {
   const [open, setOpen] = useState(true);
