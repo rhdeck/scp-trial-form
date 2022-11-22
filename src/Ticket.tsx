@@ -1,8 +1,8 @@
 import { Form, Formik } from "formik";
 import { DateTime } from "luxon";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   TextField,
   Checkbox,
@@ -11,11 +11,19 @@ import {
 } from "./FormComponents";
 import Loading from "./Loading";
 import Logo from "./logo.png";
+import { useAlert } from "./Alert";
 
 const Ticket: FC = () => {
+  const navigate = useNavigate();
+  const { alert } = useAlert();
   const { ticketid } = useParams();
+  useEffect(() => {
+    if (ticketid === "notfound") {
+      window.location.href = "https://statechange.ai";
+    }
+  }, [ticketid]);
   const url = `https://xw8v-tcfi-85ay.n7.xano.io/api:xFY-pmmG/ohoffer/${ticketid}`;
-  const { data, isFetched } = useQuery<{
+  const { data, isFetched, error } = useQuery<{
     email: string;
     name?: string;
     dates: { id: string; starts_at: number }[];
@@ -27,8 +35,8 @@ const Ticket: FC = () => {
       return response.json();
     },
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
-    cacheTime: Infinity,
+    staleTime: 0,
+    cacheTime: 0,
     retry: false,
     enabled: ticketid !== "notfound",
   });
@@ -39,6 +47,18 @@ const Ticket: FC = () => {
       DateTime.DATETIME_HUGE
     ),
   }));
+  useEffect(() => {
+    if (error) {
+      console.log("Showing an error");
+      alert({
+        title: "Not a valid ticket",
+        message: "Ask State Change Pro for an invitation",
+        actionLabel: "OK",
+      }).then(() => {
+        window.location.href = "https://statechange.ai";
+      });
+    }
+  }, [error, alert]);
   if (!isFetched) return <Loading />;
   if (!options) return null;
   return (
@@ -61,7 +81,7 @@ const Ticket: FC = () => {
                 },
                 body: JSON.stringify(values),
               });
-              // fetch()
+              navigate("/thankyou");
             }}
             validate={(values) => {
               const errors: Record<string, string> = {};
