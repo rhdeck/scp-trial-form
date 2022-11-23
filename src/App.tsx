@@ -4,6 +4,7 @@ import AlertProvider from "./Alert";
 import AppRouter from "./AppRouter";
 import { QueryClient, QueryClientProvider } from "react-query";
 
+import "react-toastify/dist/ReactToastify.css";
 const queryClient = new QueryClient();
 
 function App() {
