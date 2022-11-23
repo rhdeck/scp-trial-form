@@ -59,74 +59,77 @@ const Ticket: FC = () => {
       });
     }
   }, [error, alert]);
-  if (!isFetched) return <Loading />;
-  if (!options) return null;
+  // if (!isFetched) return <Loading />;
+  // if (!options) return null;
   return (
     <div className="h-screen w-screen bg-gray-800">
       <div className="h-full w-full flex flex-col justify-center items-center">
-        <div className="w-1/2 bg-white p-6 shadow-lg rounded-lg">
-          <Formik
-            initialValues={{
-              event_id: options[0].value,
-              email: data?.email,
-              name: data?.name,
-              agreedToTerms: false,
-            }}
-            onSubmit={async (values, form) => {
-              console.log("I would submit", values);
-              await fetch(url, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(values),
-              });
-              navigate("/thankyou");
-            }}
-            validate={(values) => {
-              const errors: Record<string, string> = {};
-              if (!values.email) errors.email = "Email is required";
-              if (!values.agreedToTerms)
-                errors.agreedToTerms =
-                  "You must agree to the terms to reserve your slot";
-              else console.log("values.agreedToTerms", values.agreedToTerms);
-              console.log(errors, values);
-              return errors;
-            }}
-            validateOnMount
-          >
-            {() => (
-              <Form id="create-oracle-form" className="flex flex-col gap-4">
-                <div className="flex flex-col justify-around items-center ">
-                  <h1 className="flex font-bold text-xl">
-                    <img src={Logo} className="h-8 w-8 mr-2" alt="" />
-                    State Change Pro Office Hours
-                  </h1>
-                  <p>Ticket to paricipate in one complimentary session</p>
-                </div>
+        <div className="sm:w-1/2 bg-white p-6 shadow-lg rounded-lg">
+          {!isFetched && <Loading />}
+          {isFetched && !!options && (
+            <Formik
+              initialValues={{
+                event_id: options[0].value,
+                email: data?.email,
+                name: data?.name,
+                agreedToTerms: false,
+              }}
+              onSubmit={async (values, form) => {
+                console.log("I would submit", values);
+                await fetch(url, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(values),
+                });
+                navigate("/thankyou");
+              }}
+              validate={(values) => {
+                const errors: Record<string, string> = {};
+                if (!values.email) errors.email = "Email is required";
+                if (!values.agreedToTerms)
+                  errors.agreedToTerms =
+                    "You must agree to the terms to reserve your slot";
+                else console.log("values.agreedToTerms", values.agreedToTerms);
+                console.log(errors, values);
+                return errors;
+              }}
+              validateOnMount
+            >
+              {() => (
+                <Form id="create-oracle-form" className="flex flex-col gap-4">
+                  <div className="flex flex-col justify-around items-center ">
+                    <h1 className="flex font-bold text-xl">
+                      <img src={Logo} className="h-8 w-8 mr-2" alt="" />
+                      State Change Pro Office Hours
+                    </h1>
+                    <p>Ticket to paricipate in one complimentary session</p>
+                  </div>
 
-                <TextField title="Name" name="name" />
+                  <TextField title="Name" name="name" />
 
-                <TextField title="Email Address" name="email" />
+                  <TextField title="Email Address" name="email" />
 
-                <StackedCards
-                  options={options}
-                  name="event_id"
-                  title="Time Slot"
-                />
+                  <StackedCards
+                    options={options}
+                    name="event_id"
+                    title="Time Slot"
+                  />
 
-                <Checkbox
-                  name="agreedToTerms"
-                  title="I agree to the office hours guest policy of State Change Pro"
-                  subTitle="tl;dr Office Hours are recorded and distributed at the discretion of State Change Pro Management, and we reserve the right to remove disruptive participants from the call."
-                />
+                  <Checkbox
+                    name="agreedToTerms"
+                    title="I agree to the office hours guest policy of State Change Pro"
+                    subTitle="tl;dr Office Hours are recorded and distributed at the discretion of State Change Pro Management, and we reserve the right to remove disruptive participants from the call."
+                  />
 
-                {/* <SubmitGroup> */}
-                <FullbarButton title="Reserve my place" />
-                {/* </SubmitGroup> */}
-              </Form>
-            )}
-          </Formik>
+                  {/* <SubmitGroup> */}
+                  <FullbarButton title="Reserve my place" />
+                  {/* </SubmitGroup> */}
+                </Form>
+              )}
+            </Formik>
+          )}
         </div>
       </div>
     </div>
