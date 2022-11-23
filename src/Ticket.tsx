@@ -100,9 +100,9 @@ const Ticket: FC = () => {
                 <div className="flex flex-col justify-around items-center ">
                   <h1 className="flex font-bold text-xl">
                     <img src={Logo} className="h-8 w-8 mr-2" alt="" />
-                    State Change Pro
+                    State Change Pro Office Hours
                   </h1>
-                  <p>Ticket for One Complimentary Office Hours</p>
+                  <p>Ticket to paricipate in one complimentary session</p>
                 </div>
 
                 <TextField title="Name" name="name" />
