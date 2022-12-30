@@ -11,11 +11,9 @@ import {
 } from "./FormComponents";
 import Loading from "./Loading";
 import Logo from "./logo.png";
-import { useAlert } from "./Alert";
 
 const Ticket: FC = () => {
   const navigate = useNavigate();
-  const { alert } = useAlert();
   const { ticketid } = useParams();
   useEffect(() => {
     if (ticketid === "notfound") {
@@ -26,7 +24,7 @@ const Ticket: FC = () => {
   const { data, isFetched, error } = useQuery<{
     email: string;
     name?: string;
-    dates: { id: string; starts_at: number }[];
+    dates: { id: string; starts_at: number; name: string }[];
   }>({
     queryKey: "ticket",
     queryFn: async () => {
@@ -40,32 +38,27 @@ const Ticket: FC = () => {
     retry: false,
     enabled: ticketid !== "notfound",
   });
-  console.log("Data is ", data);
-  const options = data?.dates.map(({ id, starts_at }) => ({
+  // console.log("Data is ", data);
+  const options = data?.dates.map(({ id, starts_at, name }) => ({
     value: id.toString(),
-    title: DateTime.fromMillis(starts_at).toLocaleString(
+    subTitle: DateTime.fromMillis(starts_at).toLocaleString(
       DateTime.DATETIME_HUGE
     ),
+    title: name,
   }));
   useEffect(() => {
     if (error) {
       console.log("Showing an error");
-      alert({
-        title: "Not a valid ticket",
-        message: "Ask State Change Pro for an invitation",
-        actionLabel: "OK",
-      }).then(() => {
-        window.location.href = "https://statechange.ai";
-      });
+      navigate("/");
     }
-  }, [error, alert]);
+  }, [error, navigate]);
   // if (!isFetched) return <Loading />;
   // if (!options) return null;
   return (
     <div className="h-screen w-screen bg-gray-800">
       <div className="h-full w-full flex flex-col justify-center items-center">
         <div className="sm:w-1/2 bg-white p-6 shadow-lg rounded-lg">
-          {!isFetched && <Loading />}
+          {!isFetched && !error && <Loading />}
           {isFetched && !!options && (
             <Formik
               initialValues={{
@@ -75,7 +68,7 @@ const Ticket: FC = () => {
                 agreedToTerms: false,
               }}
               onSubmit={async (values, form) => {
-                console.log("I would submit", values);
+                // console.log("I would submit", values);
                 await fetch(url, {
                   method: "POST",
                   headers: {
@@ -91,8 +84,8 @@ const Ticket: FC = () => {
                 if (!values.agreedToTerms)
                   errors.agreedToTerms =
                     "You must agree to the terms to reserve your slot";
-                else console.log("values.agreedToTerms", values.agreedToTerms);
-                console.log(errors, values);
+                // else console.log("values.agreedToTerms", values.agreedToTerms);
+                // console.log(errors, values);
                 return errors;
               }}
               validateOnMount

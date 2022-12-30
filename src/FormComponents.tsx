@@ -19,8 +19,8 @@ export const OptionList: FC<{
   subTitle?: string | ReactElement;
   options: { name: string | ReactElement; value: string }[];
 }> = ({ name: fieldName, title, subTitle, options }) => {
-  const [{ value }, , { setValue }] = useField(fieldName);
-  console.log("Value for", fieldName, value);
+  const [, , { setValue }] = useField(fieldName);
+  // console.log("Value for", fieldName, value);
   return (
     <div className="col-span-6">
       <fieldset>
