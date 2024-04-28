@@ -20,7 +20,7 @@ const Ticket: FC = () => {
       window.location.href = "https://statechange.ai";
     }
   }, [ticketid]);
-  const url = `https://api.statechange.ai/api:tickets/${ticketid}`;
+  const url = `https://api.statechange.ai/api:tickets/ohoffer/${ticketid}`;
   const { data, isFetched, error } = useQuery<{
     email: string;
     name?: string;
