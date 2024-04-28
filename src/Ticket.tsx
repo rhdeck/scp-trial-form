@@ -20,7 +20,7 @@ const Ticket: FC = () => {
       window.location.href = "https://statechange.ai";
     }
   }, [ticketid]);
-  const url = `https://xw8v-tcfi-85ay.n7.xano.io/api:xFY-pmmG/ohoffer/${ticketid}`;
+  const url = `https://api.statechange.ai/api:tickets/${ticketid}`;
   const { data, isFetched, error } = useQuery<{
     email: string;
     name?: string;
