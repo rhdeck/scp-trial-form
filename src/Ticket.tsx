@@ -56,7 +56,7 @@ const Ticket: FC = () => {
   // if (!options) return null;
   return (
     <div className="h-screen w-screen bg-gray-800">
-      <div className="h-full w-full flex flex-col justify-center items-center">
+      <div className="my-5 min-h-full w-full flex flex-col justify-center items-center">
         <div className="sm:w-1/2 bg-white p-6 shadow-lg rounded-lg">
           {!isFetched && !error && <Loading />}
           {isFetched && !!options && (
