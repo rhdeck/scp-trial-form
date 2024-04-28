@@ -18,10 +18,6 @@ const Embed: FC = () => {
       background: "default",
     });
   }, []);
-  return (
-    <Fragment>
-      <div id="my-reform"></div>
-    </Fragment>
-  );
+  return <div id="my-reform"></div>;
 };
 export default Embed;
